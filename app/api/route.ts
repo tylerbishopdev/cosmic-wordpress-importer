@@ -6,7 +6,7 @@ const parser = new Parser()
 
 export async function POST(request: Request) {
   const res = await request.json()
-  if (!res.bucket.ezoiccom)
+  if (!res.bucket.request)
     return NextResponse.json(
       {
         message:

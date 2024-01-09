@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/components/ui/use-toast"
 
-const Bucket = "64dacd174d77d60008253cff"
 
 export function Form(bucket: Bucket) {
   const [submitting, setSubmitting] = useState(false)
