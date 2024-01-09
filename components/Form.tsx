@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/components/ui/use-toast"
 
+const Bucket = "64dacd174d77d60008253cff"
+
 export function Form(bucket: Bucket) {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -67,7 +69,7 @@ export function Form(bucket: Bucket) {
             Try{" "}
             <a
               href="https://github.blog/feed"
-              target="_blank"
+              target="_write_key"
               className="text-blue-600"
               rel="noreferrer"
             >
@@ -95,8 +97,8 @@ export function Form(bucket: Bucket) {
                   type="number"
                   name="limit"
                   placeholder="Number of posts"
-                  defaultValue="10"
-                  max={100}
+                  defaultValue="100"
+                  max={750}
                 />
               </label>
             </div>
@@ -108,7 +110,7 @@ export function Form(bucket: Bucket) {
             size={submitting ? "icon" : "default"}
           >
             {submitting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               "Submit"
             )}

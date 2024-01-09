@@ -1,21 +1,28 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
 import { createBucketClient } from "@cosmicjs/sdk"
 import Parser from "rss-parser"
+
 const parser = new Parser()
 
 export async function POST(request: Request) {
   const res = await request.json()
-  if (!res.bucket.bucket_slug)
-    return NextResponse.json({ message: 'Looks like you are trying to access this extension outside of Cosmic. Log in and install this URL in your Cosmic Bucket to use it.' }, { status: 400 })
+  if (!res.bucket.ezoiccom)
+    return NextResponse.json(
+      {
+        message:
+          "Looks like you are trying to access this extension outside of Cosmic. Log in and install this URL in your Cosmic Bucket to use it.",
+      },
+      { status: 400 }
+    )
   const cosmic = createBucketClient({
-    bucketSlug: res.bucket.bucket_slug,
-    readKey: res.bucket.read_key,
-    writeKey: res.bucket.write_key,
+    bucketSlug: "ezoiccom",
+    readKey: "9H9JGcz08VZKD3PxhVzn77npiiO5pDEYlsDjVHkCbz1ndntrtK",
+    writeKey: "wiMv0IqvaxZNoHpsatsN8nAMr4E9LopPdKuYX8AerhRRKqXLpE",
   })
   const url = res.url
   const limit = Number(res.limit)
 
-  const groups = Math.ceil(limit / 10)
+  const groups = Math.ceil(limit / 75)
   let paged = 1
   let content
   const new_object_type = {
@@ -24,7 +31,7 @@ export async function POST(request: Request) {
     emoji: "📰",
     options: {
       slug_field: true,
-      content_editor: false
+      content_editor: false,
     },
     metafields: [
       {
@@ -67,7 +74,13 @@ export async function POST(request: Request) {
   try {
     await cosmic.objectTypes.insertOne(new_object_type)
   } catch (e) {
-    return NextResponse.json({ message: 'Looks like you already have a wp-posts Object type. Remove this from your Bucket by going to Posts > Settings before importing your WordPress posts.' }, { status: 400 })
+    return NextResponse.json(
+      {
+        message:
+          "Looks like you already have a wp-posts Object type. Remove this from your Bucket by going to Posts > Settings before importing your WordPress posts.",
+      },
+      { status: 400 }
+    )
   }
   while (paged <= groups) {
     const feed = await parser.parseURL(url + `?paged=${paged}`)
@@ -77,10 +90,9 @@ export async function POST(request: Request) {
       if (item.content) content = item.content
       if (item["content:encoded"]) content = item["content:encoded"]
       const snippet = item.contentSnippet
-      const date = item.pubDate;
-      let published_date = '';
-      if (date)
-       published_date = (new Date(date)).toISOString().split("T")[0]
+      const date = item.pubDate
+      let published_date = ""
+      if (date) published_date = new Date(date).toISOString().split("T")[0]
       const categories = item?.categories?.join(", ")
       const author = item.creator
       const object = {
@@ -97,7 +109,10 @@ export async function POST(request: Request) {
       try {
         await cosmic.objects.insertOne(object)
       } catch (e) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 }
+        )
       }
     }
     paged++

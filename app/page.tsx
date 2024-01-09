@@ -36,16 +36,16 @@ export default async function IndexPage({
     // console.log(e) Do nothing
   }
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+    <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Import your WordPress blog posts into Cosmic
+          Shiba say no RSS FEED LIMITS!!!
         </h1>
         {!posts ? (
           <>
             <p className="mb-4 max-w-[700px] text-lg text-muted-foreground">
               Use the form below to import blog posts from any WordPress RSS
-              feed <Rss className="inline h-4 w-4" />
+              feed <Rss className="inline w-4 h-4" />
             </p>
             <div className="mb-4">
               <h3 className="mb-4 font-bold">What will happen?</h3>
